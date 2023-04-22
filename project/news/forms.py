@@ -1,5 +1,6 @@
 from .models import Record
-from django.forms import ModelForm, TextInput, DateTimeInput, Textarea, ModelChoiceField
+from django.forms import ModelForm, TextInput, DateTimeInput, Textarea
+from django.core.exceptions import ValidationError
 
 
 class RecordForm(ModelForm):
@@ -18,3 +19,12 @@ class RecordForm(ModelForm):
             'full_text': Textarea(attrs={'class': 'form-control', 'placeholder': 'Текст публикации'}),
             'category__title': TextInput(attrs={'class': 'form-control', 'placeholder': 'Категория'})
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        full_text = cleaned_data.get("full_text")
+        if full_text is not None and len(full_text) < 20:
+            raise ValidationError({
+                "full_text": "Описание не может быть менее 20 символов."
+            })
+        return cleaned_data

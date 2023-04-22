@@ -57,7 +57,7 @@ def create(request):
             form.save()
             return redirect('news_home')
         else:
-            error = 'Форма заполнена не корректно'
+            error = 'Описание не может быть менее 20 символов.'
     form = RecordForm()
     data = {'form': form, 'error': error}  # объект form будет передаваться в шаблон search.html
     return render(request, 'news/create.html', data)
