@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from .models import Record
 from .filters import RecordFilter
@@ -55,6 +55,7 @@ def create(request):
         form = RecordForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('news_home')
         else:
             error = 'Форма заполнена не корректно'
     form = RecordForm()
