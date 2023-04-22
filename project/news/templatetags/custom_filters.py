@@ -12,8 +12,7 @@ CURSE_WORDS = ['огромный', 'динамики', 'коаксиальные
 
 @register.filter(name='censorship')
 def censor(text):
-    # перебор списка слов и подставление *, при совпадении
-    for el in CURSE_WORDS:
+    for el in CURSE_WORDS:  # перебор списка слов и замена на *, при совпадении
         pattern = re.compile(r'\b{}\b'.format(el), re.IGNORECASE)
         censored_word = el[0] + '*'*(len(el)-1)
         text = re.sub(pattern, censored_word, text)

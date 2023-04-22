@@ -1,41 +1,16 @@
-import django_filters
-from .models import Record, Category
-from django import forms
+from django_filters import FilterSet, CharFilter, DateFilter, ModelChoiceFilter
+from django.forms import DateInput
+from .models import Category
 
 
-class RecordFilter(django_filters.FilterSet):
+class RecordFilter(FilterSet):
 
-    data = django_filters.DateRangeFilter(widget=forms.TextInput(attrs={'type': 'date'}), label='Поиск по дате',)
-    title = django_filters.CharFilter(lookup_expr='icontains',)
+    category = ModelChoiceFilter(field_name='category__title',
+                                 queryset=Category.objects.all(),
+                                 label='Категория',
+                                 empty_label='Категория не выбрана')
 
-    class Meta:
-        model = Record
-        fields = ['category', ]
+    title = CharFilter(lookup_expr='contains',)
 
-
-
-
-# category = django_filters.CharFilter(
-#         field_name='category__title',
-#         label='Категория',
-#         lookup_expr='icontains',
-#     )
-
-
-
-
-
-
-# работает по полному названию и категории + вместе
-# from django_filters import FilterSet
-# from .models import Record
-# from django import forms
-# class RecordFilter(FilterSet):
-#     class Meta:
-#         model = Record
-#         fields = [
-#             'title',
-#             'category',
-#             'data',
-#         ]
+    date = DateFilter(field_name='data', lookup_expr='gt', label='Дата', widget=DateInput(attrs={'type': 'date'},))
 
